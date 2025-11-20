@@ -7,6 +7,7 @@
 
 export type {
     GachaStatus,
+    GachaCategory,
     CardRarity,
     CardResult,
     GachaCard,

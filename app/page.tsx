@@ -1,11 +1,23 @@
+"use client";
+
+import { useState, useMemo } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/home/Hero";
 import GachaCard from "@/components/gacha/GachaCard";
 import { GACHA_LIST } from "@/data/gacha-list";
 import { GACHA_CATEGORIES } from "@/lib/constants";
+import type { GachaCategory } from "@/types";
 
 export default function Home() {
+    const [selectedCategory, setSelectedCategory] = useState<GachaCategory>("all");
+
+    // カテゴリでフィルタリングされたガチャリスト
+    const filteredGachas = useMemo(() => {
+        if (selectedCategory === "all") return GACHA_LIST;
+        return GACHA_LIST.filter(gacha => gacha.category === selectedCategory);
+    }, [selectedCategory]);
+
     return (
         <div className="flex min-h-screen flex-col bg-background">
             <Header />
@@ -23,9 +35,10 @@ export default function Home() {
                             {GACHA_CATEGORIES.map((category) => (
                                 <button
                                     key={category.id}
-                                    className={`rounded-full px-4 py-1 text-sm transition-colors ${category.id === "all"
-                                            ? "bg-surface text-white hover:bg-white/10"
-                                            : "text-gray-400 hover:text-white"
+                                    onClick={() => setSelectedCategory(category.id)}
+                                    className={`rounded-full px-4 py-1 text-sm transition-colors ${selectedCategory === category.id
+                                        ? "bg-primary text-black font-bold"
+                                        : "bg-surface text-gray-400 hover:text-white hover:bg-white/10"
                                         }`}
                                 >
                                     {category.label}
@@ -35,10 +48,18 @@ export default function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {GACHA_LIST.map((gacha) => (
+                        {filteredGachas.map((gacha) => (
                             <GachaCard key={gacha.id} {...gacha} />
                         ))}
                     </div>
+
+                    {filteredGachas.length === 0 && (
+                        <div className="text-center py-12">
+                            <p className="text-gray-400 text-lg">
+                                このカテゴリのガチャはまだありません
+                            </p>
+                        </div>
+                    )}
                 </section>
             </main>
 

@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import toast from "react-hot-toast";
 import GachaResultModal from "./GachaResultModal";
+import Spinner from "@/components/ui/Spinner";
 import type { GachaCardProps, CardResult } from "@/types";
 import { calculateProgress, getRandomElement } from "@/lib/utils";
 
@@ -18,18 +20,26 @@ export default function GachaCard({
 }: GachaCardProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [gachaResult, setGachaResult] = useState<CardResult | null>(null);
+    const [isPulling, setIsPulling] = useState(false);
 
     const progress = calculateProgress(remaining, total);
 
-    const handlePull = () => {
+    const handlePull = async () => {
         if (prizes.length === 0) {
-            alert("このガチャには景品が設定されていません。");
+            toast.error("このガチャには景品が設定されていません");
             return;
         }
+
+        setIsPulling(true);
+
+        // ガチャ演出のための擬似的な遅延（1秒）
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         // ランダムに景品を選択
         const randomPrize = getRandomElement(prizes);
         setGachaResult(randomPrize);
         setIsModalOpen(true);
+        setIsPulling(false);
     };
 
     return (
@@ -76,11 +86,20 @@ export default function GachaCard({
 
                     <button
                         onClick={handlePull}
-                        disabled={status !== "active"}
+                        disabled={status !== "active" || isPulling}
                         className="w-full rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 py-3 font-bold text-black transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 group/btn"
                     >
-                        1回引く
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                        {isPulling ? (
+                            <>
+                                <Spinner size="sm" className="text-black" />
+                                <span>抽選中...</span>
+                            </>
+                        ) : (
+                            <>
+                                1回引く
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                            </>
+                        )}
                     </button>
                 </div>
             </div>

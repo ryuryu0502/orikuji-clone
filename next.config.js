@@ -1,16 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        remotePatterns: [
-            {
-                protocol: "https",
-                hostname: "placehold.co",
-            },
-            {
-                protocol: "https",
-                hostname: "via.placeholder.com",
-            },
-        ],
+        // ローカル画像を使用するため、remotePatterns は不要
+        // 必要に応じて外部画像ドメインを追加
+        remotePatterns: [],
     },
 };
 

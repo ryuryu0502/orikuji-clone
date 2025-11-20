@@ -8,6 +8,11 @@
 export type GachaStatus = "active" | "sold_out" | "ended";
 
 /**
+ * ガチャのカテゴリ
+ */
+export type GachaCategory = "all" | "pokemon" | "onepiece" | "yugioh" | "other";
+
+/**
  * カードのレアリティ
  */
 export type CardRarity = "UR" | "SR" | "R" | "N";
@@ -32,6 +37,8 @@ export interface GachaCard {
     id: number;
     /** ガチャタイトル */
     title: string;
+    /** カテゴリ */
+    category: GachaCategory;
     /** 価格（ポイント） */
     price: number;
     /** サムネイル画像URL */

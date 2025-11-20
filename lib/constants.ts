@@ -1,3 +1,5 @@
+import type { GachaCategory } from '@/types';
+
 /**
  * アプリケーション全体で使用する定数
  */
@@ -5,7 +7,7 @@
 /**
  * アプリケーション名
  */
-export const APP_NAME = "Orikuji Clone";
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Orikuji Clone";
 
 /**
  * アプリケーションの説明
@@ -13,19 +15,25 @@ export const APP_NAME = "Orikuji Clone";
 export const APP_DESCRIPTION = "Clone of Orikuji.com - オンラインガチャサイト";
 
 /**
+ * アプリケーションURL
+ */
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+/**
  * デフォルトのガチャステータス
  */
 export const DEFAULT_GACHA_STATUS = "active";
 
 /**
- * ガチャカテゴリー
+ * ガチャのカテゴリ一覧
  */
-export const GACHA_CATEGORIES = [
+export const GACHA_CATEGORIES: { id: GachaCategory; label: string }[] = [
     { id: "all", label: "すべて" },
     { id: "pokemon", label: "ポケモン" },
     { id: "onepiece", label: "ワンピース" },
     { id: "yugioh", label: "遊戯王" },
-] as const;
+    { id: "other", label: "その他" },
+];
 
 /**
  * レアリティの色設定
