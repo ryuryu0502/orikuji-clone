@@ -1,0 +1,12 @@
+@echo off
+echo Installing dependencies...
+call npm install
+if %errorlevel% neq 0 (
+    echo Failed to install dependencies. Please check if npm is installed.
+    pause
+    exit /b %errorlevel%
+)
+
+echo Starting development server...
+call npm run dev
+pause
